@@ -1,52 +1,69 @@
+#include <X11/XF86keysym.h>
+#include "gaplessgrid.c"
 /* See LICENSE file for copyright and license details. */
+
+#define NUMCOLORS 5
+static const char colors[NUMCOLORS][MAXCOLORS][8] = {
+  //border, foreground, background
+	{"#005577", "#eeeeee", "#005577"}, // normal (white on light blue)
+	{"#000088", "#eeeeee", "#000088"}, // selected (white on dark blue)
+	{"#00ff41", "#00ff41", "#005577"}, // dark green on light blue
+	{"#cc6666", "#cc6666", "#005577"}, // error (white on red)
+	{"#f0c674", "#f0c674", "#005577"}, // warning (black on yellow)
+	// add more here
+};
 
 /* appearance */
 static const char *fonts[] = {
-	"monospace:size=10"
+	"Siji:size=12",
+	"SAO UI:size=13",
+	"-microsoft-comic sans ms-medium-r-normal--0-0-0-0-p-0-adobe-standard",
 };
-static const char dmenufont[]       = "monospace:size=10";
-static const char normbordercolor[] = "#444444";
-static const char normbgcolor[]     = "#222222";
-static const char normfgcolor[]     = "#bbbbbb";
-static const char selbordercolor[]  = "#005577";
-static const char selbgcolor[]      = "#005577";
-static const char selfgcolor[]      = "#eeeeee";
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const char dmenufont[]       = "Gunship-11";
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
+static const int topbar             = 0;        /* 0 means bottom bar */
+static const unsigned int gappx     = 6; 	/* gap pixel between windows */
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "\ue1ec", "\ue1a6", "\ue1f5", "\ue181", "\ue182", "\ue183", "\ue184", "\ue185", "\ue1ee" };
 
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class      instance    title       tags mask     isfloating	   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,         	   -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,        	   -1 },
+	{ "urxvt-",   NULL,       NULL,       0,            0,             -1 },
+	{ "chromium", NULL,	  NULL,	      1 << 8,	    0,		   -1 },
+	{ "vivaldi",  NULL,	  NULL,	      1 << 8,	    0,		   -1 },
+	{ "Steam",    NULL,       NULL,       1 << 2,       1,		   -1 },
+	{ "DiscordCanary", NULL,  NULL,	      0,	    0,		   -1 },
 };
 
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	{ "\uE002",      tile },    /* first entry is default */
+	{ "\uE006",      NULL },    /* no layout function means floating behavior */
+	{ "[M]",      	 monocle },
+	{ "\uE005",   	 gaplessgrid},
+	{ "\uE003",	 htile},
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+	{ MODKEY,                       KEY,      comboview,      {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+	{ MODKEY|ShiftMask,             KEY,      combotag,       {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
@@ -54,8 +71,12 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", "black", "-nf", "white", "-sb", "blue", "-sf", "white", NULL };
+static const char *termcmd[]  = { "urxvt", NULL };
+static const char *raisevol[] = { "ponymix", "increase", "5", NULL};
+static const char *decrvol[] =  { "ponymix", "decrease", "5", NULL};
+static const char *mutevol[] =  { "ponymix", "toggle", NULL};
+
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -74,6 +95,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,			XK_g,	   setlayout,	   {.v = &layouts[3]} },
+	{ MODKEY|ShiftMask,		XK_b,	   setlayout,	   {.v = &layouts[4]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
@@ -86,6 +109,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Right,  viewtoright,    {0} },
 	{ MODKEY|ShiftMask,             XK_Left,   tagtoleft,      {0} },
 	{ MODKEY|ShiftMask,             XK_Right,  tagtoright,     {0} },
+	{ 0,				XF86XK_AudioRaiseVolume,   spawn,	{.v = raisevol }},
+	{ 0,				XF86XK_AudioLowerVolume,   spawn,	{.v = decrvol }},
+	{ 0,				XF86XK_AudioMute,	   spawn,	{.v = mutevol  }},
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -109,9 +135,8 @@ static Button buttons[] = {
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
+	{ ClkTagBar,            0,              Button1,        view,      	{0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+	{ ClkTagBar,            MODKEY,         Button1,        combotag,       {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
