@@ -49,6 +49,7 @@ static const Rule rules[] = {
 	{ "vivaldi",  NULL,	  NULL,	      1 << 8,	    0,		   -1 },
 	{ "Steam",    NULL,       NULL,       1 << 2,       1,		   -1 },
 	{ "DiscordCanary", NULL,  NULL,	      0,	    0,		   -1 },
+	{ "AnimeWatch.py", NULL,  NULL,	      1 << 2,	    0,		   -1 },
 };
 
 /* layout(s) */
