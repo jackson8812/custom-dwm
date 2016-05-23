@@ -837,8 +837,6 @@ drawbar(Monitor *m)
 		w = TEXTW(tags[i]);
 		drw_setscheme(drw, &scheme[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2 : 0)]);
 		drw_text(drw, x, 0, w, bh, tags[i], 0);
-		drw_rect(drw, x + 1, 1, dx, dx, m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-		         0, 0);
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
