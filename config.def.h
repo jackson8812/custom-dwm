@@ -19,12 +19,16 @@ static const char *fonts[] = {
 	"SAO UI:size=13",
 	"-microsoft-comic sans ms-medium-r-normal--0-0-0-0-p-0-adobe-standard",
 };
-static const char dmenufont[]       = "Gunship-11";
+static const char dmenufont[]       = "SAO UI:size=13";
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, 0: display systray on the last monitor*/
+static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const unsigned int gappx     = 6; 	/* gap pixel between windows */
+static const unsigned int gappx     = 3; 	/* gap pixel between windows */
 
 /*   Display modes of the tab bar: never shown, always shown, shown only in */
 /*   monocle mode in presence of several windows.                           */
@@ -44,7 +48,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating	   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,         	   -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,        	   -1 },
-	{ "urxvt-",   NULL,       NULL,       0,            0,             -1 },
+	{ "spotify",  NULL,       NULL,       1 << 1,       0,             -1 },
 	{ "chromium", NULL,	  NULL,	      1 << 8,	    0,		   -1 },
 	{ "vivaldi",  NULL,	  NULL,	      1 << 8,	    0,		   -1 },
 	{ "Steam",    NULL,       NULL,       1 << 2,       1,		   -1 },
@@ -64,6 +68,7 @@ static const Layout layouts[] = {
 	{ "[M]",      	 monocle },
 	{ "\uE005",   	 gaplessgrid},
 	{ "\uE003",	 htile},
+	{ "\uE010",	 centeredmaster},
 };
 
 /* key definitions */
@@ -79,7 +84,8 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", "black", "-nf", "white", "-sb", "blue", "-sf", "white", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-p","Run: ","-i", "-fn", dmenufont, "-nb", "black", "-nf", "white", "-sb", "blue", "-sf", "white", NULL };
+static const char *j4dmenucmd[] = {"j4-dmenu-desktop", "--dmenu=dmenu -p 'Run: ' -i -fn 'SAO UI:size=13' -nb black -nf white -sb blue -sf white", NULL };
 static const char *termcmd[]  = { "urxvt", NULL };
 static const char *raisevol[] = { "ponymix", "increase", "5", NULL};
 static const char *decrvol[] =  { "ponymix", "decrease", "5", NULL};
@@ -89,6 +95,7 @@ static const char *mutevol[] =  { "ponymix", "toggle", NULL};
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,		XK_d,	   spawn,	   {.v = j4dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_w,      tabmode,        {-1} },
@@ -106,6 +113,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,			XK_g,	   setlayout,	   {.v = &layouts[3]} },
 	{ MODKEY|ShiftMask,		XK_b,	   setlayout,	   {.v = &layouts[4]} },
+	{ MODKEY,			XK_c,	   setlayout,	   {.v = &layouts[5]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
