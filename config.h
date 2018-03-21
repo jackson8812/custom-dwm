@@ -15,11 +15,11 @@ static const char colors[NUMCOLORS][MAXCOLORS][8] = {
 
 /* appearance */
 static const char *fonts[] = {
-	"Siji:size=12",
-	"SAO UI:size=13",
+	"Wuncon Siji:size=15",
+	"SAO UI:size=15",
 	"-microsoft-comic sans ms-medium-r-normal--0-0-0-0-p-0-adobe-standard",
 };
-static const char dmenufont[]       = "SAO UI:size=13";
+static const char dmenufont[]       = "SAO UI:size=15";
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -49,11 +49,9 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            1,         	   -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,        	   -1 },
 	{ "spotify",  NULL,       NULL,       1 << 1,       0,             -1 },
-	{ "chromium", NULL,	  NULL,	      1 << 8,	    0,		   -1 },
-	{ "vivaldi",  NULL,	  NULL,	      1 << 8,	    0,		   -1 },
-	{ "Steam",    NULL,       NULL,       1 << 2,       1,		   -1 },
-	{ "DiscordCanary", NULL,  NULL,	      0,	    0,		   -1 },
-	{ "AnimeWatch.py", NULL,  NULL,	      1 << 2,	    0,		   -1 },
+	{ "chromium", NULL,	      NULL,	      1 << 8,	    0,		       -1 },
+	{ "vivaldi",  NULL,	      NULL,	      1 << 8,	    0,		       -1 },
+	{ "Steam",    NULL,       NULL,       1 << 2,       1,		       -1 },
 };
 
 /* layout(s) */
