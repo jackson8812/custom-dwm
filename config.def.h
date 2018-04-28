@@ -74,6 +74,8 @@ static const char *playcmd[] = { "playerctl", "play-pause", NULL};
 static const char *prevcmd[] = { "playerctl", "previous", NULL};
 static const char *nextcmd[] = { "playerctl", "next", NULL};
 
+#include "shiftview.c"
+
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
@@ -97,6 +99,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+    { MODKEY,                       XK_Left,   shiftview,      {.i = -1 } },
+    { MODKEY,                       XK_Right,  shiftview,      {.i = +1 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
@@ -132,7 +136,9 @@ static Button buttons[] = {
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        combotag,            {0} },
+    { ClkTagBar,            0,              Button4,        shiftview,      {.i = -1 } },
+    { ClkTagBar,            0,              Button5,        shiftview,      {.i = +1 } },
+	{ ClkTagBar,            MODKEY,         Button1,        combotag,       {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
 
