@@ -73,6 +73,8 @@ static const char *mutevol[] = { "ponymix", "toggle", NULL};
 static const char *playcmd[] = { "playerctl", "play-pause", NULL};
 static const char *prevcmd[] = { "playerctl", "previous", NULL};
 static const char *nextcmd[] = { "playerctl", "next", NULL};
+static const char *backup[]  = { "xbacklight", "-inc", "10", NULL};
+static const char *backdown[] = {"xbacklight", "-dec", "10", NULL};
 
 #include "shiftview.c"
 
@@ -111,6 +113,8 @@ static Key keys[] = {
     { 0,                            XF86XK_AudioPlay,          spawn,   {.v = playcmd }},
     { 0,                            XF86XK_AudioNext,          spawn,   {.v = nextcmd }},
     { 0,                            XF86XK_AudioPrev,          spawn,   {.v = prevcmd }},
+    { 0,                            XF86XK_MonBrightnessUp,    spawn,   {.v = backup  }},
+    { 0,                            XF86XK_MonBrightnessDown,  spawn,   {.v = backdown}},
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
