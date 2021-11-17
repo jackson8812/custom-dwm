@@ -15,11 +15,11 @@ static const char colors[NUMCOLORS][MAXCOLORS][8] = {
 
 /* appearance */
 static const char *fonts[] = {
-	"Wuncon Siji:size=15",
-	"SAO UI:size=15",
+	"Wuncon Siji:size=12",
+	"SAO UI:size=12",
 	"-microsoft-comic sans ms-medium-r-normal--0-0-0-0-p-0-adobe-standard",
 };
-static const char dmenufont[]       = "SAO UI:size=15";
+static const char dmenufont[]       = "SAO UI:size=12";
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -27,7 +27,7 @@ static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, 0: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 0;        /* 0 means bottom bar */
+static const int topbar             = 1;        /* 0 means bottom bar */
 static const unsigned int gappx     = 3; 	/* gap pixel between windows */
 
 /*   Display modes of the tab bar: never shown, always shown, shown only in */

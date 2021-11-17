@@ -64,3 +64,4 @@ while true; do
 	xsetroot -name "$(getvolume) $(getbattery) $(getmusic) $(getdate) $(gettime)"
 	sleep 60
 done &
+# $(getvolume)
